@@ -3,12 +3,14 @@ import Header from "./Header";
 import ListingsContainer from "./ListingsContainer";
 
 function App() {
-  const [items, setItems] = useState(null)
+  const [items, setItems] = useState()
+  
 
   useEffect(() => {
     fetch('http://localhost:6001/listings')
     .then(r => r.json())
     .then(r => setItems(r))
+    
   }, [])
 
   function handleDelete(id){
@@ -19,11 +21,22 @@ function App() {
     setItems(newList)
   }
 
+  function handleSubmit(input){
+    const newListings = items.filter((item) => {
+      return item.description.toUpperCase().includes(input.toUpperCase())
+    })
+    setItems(newListings)
+  }
+
+  
+    
+
+
   console.log(items)
 
   return (
     <div className="app">
-      <Header />
+      <Header handleSubmit={handleSubmit}/>
       <ListingsContainer listings={items} handleDelete={handleDelete}/>
     </div>
   );
